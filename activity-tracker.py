@@ -16,7 +16,8 @@ def save_to_json(filepath, data):
 
 
 if __name__ == "__main__":
-   data = fetch_data("eezzatt")
-   filepath = r"C:\Users\Admin\Documents\Personal Projects\Github-User-Activity\data.json"
-   save_to_json(filepath, data)
+    data = fetch_data("eezzatt")
+    filepath = r"C:\Users\Admin\Documents\Personal Projects\Github-User-Activity\data.json"
+    save_to_json(filepath, data)
+    # testing
     
