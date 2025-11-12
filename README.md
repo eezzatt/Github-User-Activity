@@ -18,5 +18,5 @@ cd GitHub-User-Activity
 ## Execution:
 Run:
 ```bash
-python activity-tracker.py (username)
+python activity-tracker.py (username of GitHub user)
 ```
