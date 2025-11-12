@@ -20,3 +20,6 @@ Run:
 ```bash
 python activity-tracker.py (username of GitHub user)
 ```
+
+## Original Project Link:
+https://roadmap.sh/projects/github-user-activity
