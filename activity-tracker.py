@@ -38,80 +38,96 @@ def display_event_types(events):
     print(f"{event_types}\n")
 
 
-def pushEventHandler(event):
+def createCommitEventHandler(event):
     print(event['type'])
-    print(f"{event['actor']['display_login']} pushed to repo {event['repo']['name']}")
-    
-    
-def publicEventHandler(event):
-    print(event['type'])
-    print(f"{event['actor']['display_login']} made repo {event['repo']['name']} public")
-    
-    
-def forkEventHandler(event):
-    print(event['type'])
-    print(f"{event['actor']['display_login']} forked repo {event['repo']['name']}")
-    
-    
-def pullRequestEventHandler(event):
-    print(event['type'])
-    print(f'''{event['actor']['display_login']} {event['payload']['action']} a pull request for repo {event['repo']['name']}''')
-
-
-def deleteEventHandler(event):
-    print(event['type'])
-    print(
-f'''{event['actor']['display_login']} deleted a {event['payload']['ref_type']} for repo {event['repo']['name']}'''
-        )
-    
-    
-def pullRequestReviewEventHandler(event):
-    print(event['type'])
-    print(
-f'''{event['actor']['display_login']} {event['payload']['action']} a review for pull request {event['payload']['pull_request']['number']} in repo {event['repo']['name']}'''
-          )
-    
-    
-def issueCommentEventHandler(event):
-    print(event['type'])
-    print(
-f'''
-{event['actor']['display_login']} {event['payload']['action']} comment: '{event['payload']['comment']['body']}' for issue {event['payload']['issue']['number']} for repo {event['repo']['name']}
-'''
-          )
-    
-    
-def pullRequestReviewCommentHandler(event):
-    print(event['type'])
-    print(
-f'''{event['actor']['display_login']} {event['payload']['action']} comment: '{event['payload']['comment']['body']}' for pull request {event['payload']['pull_request']['number']} for repo {event['repo']['name']}'''
-    )
+    print(f"{event['actor']['display_login']} {event['payload']['action']} a new commit comment for repo {event['repo']['name']}")
 
 
 def createEventHandler(event):
     print(event['type'])
     if event['payload']['ref_type'] == 'repository':
         print(
-f'''{event['actor']['display_login']} created a new {event['payload']['ref_type']}'''
+f"{event['actor']['display_login']} created a new {event['payload']['ref_type']}: {event['repo']['name']}."
         )
     else:
         print(
-f'''{event['actor']['display_login']} created a new {event['payload']['ref_type']} in repo {event['repo']['name']}.'''
+f"{event['actor']['display_login']} created a new {event['payload']['ref_type']} in repo {event['repo']['name']}."
         )
+
+
+def deleteEventHandler(event):
+    print(event['type'])
+    print(
+f"{event['actor']['display_login']} deleted a {event['payload']['ref_type']} for repo {event['repo']['name']}"
+        )
+
+
+def discussionEventHandler(event):
+    print(event['type'])
+    print(
+f"{event['actor']['display_login']} {event['payload']['action']} a new discussion for repo {event['repo']['name']}"
+        )
+
+
+def forkEventHandler(event):
+    print(event['type'])
+    print(f"{event['actor']['display_login']} forked repo {event['repo']['name']}")
+
+
+def gollumEventHandler(event):
+    print(event['type'])
+    print(f"{event['actor']['display_login']} {event['payload']['pages[][action]']} wiki page {event['payload']['pages[][page_name]']} for repo {event['repo']['name']}")
+
+
+def issueCommentEventHandler(event):
+    print(event['type'])
+    print(
+f"{event['actor']['display_login']} {event['payload']['action']} comment: '{event['payload']['comment']['body']}' for issue {event['payload']['issue']['number']} for repo {event['repo']['name']}")
+
+
+def issuesEventHandler(event):
+    print(event['type'])
+    print(f"{event['actor']['display_login']} {event['payload']['action']} an issue for repo {event['repo']['name']}")
+    
+    
+def memberEventHandler(event):
+    print(event['type'])
+    print(f"{event['actor']['display_login']} {event['payload']['action']} a member to repo {event['repo']['name']}")
+
+
+def publicEventHandler(event):
+    print(event['type'])
+    print(f"{event['actor']['display_login']} made repo {event['repo']['name']} public")
+
+
+def pullRequestEventHandler(event):
+    print(event['type'])
+    print(f"{event['actor']['display_login']} {event['payload']['action']} a pull request for repo {event['repo']['name']}")
+
+
+def pullRequestReviewEventHandler(event):
+    print(event['type'])
+    print(f"{event['actor']['display_login']} {event['payload']['action']} a review for pull request {event['payload']['pull_request']['number']} in repo {event['repo']['name']}")
+    
+    
+def pullRequestReviewCommentHandler(event):
+    print(event['type'])
+    print(f"{event['actor']['display_login']} {event['payload']['action']} comment: '{event['payload']['comment']['body']}' for pull request {event['payload']['pull_request']['number']} for repo {event['repo']['name']}")
+
+
+def pushEventHandler(event):
+    print(event['type'])
+    print(f"{event['actor']['display_login']} pushed to repo {event['repo']['name']}")
 
 
 def releaseEventHandler(event):
     print(event['type'])
-    print(
-f'''{event['actor']['display_login']} {event['payload']['action']} a release to repo {event['repo']['name']}.'''
-    )
-    
+    print(f"{event['actor']['display_login']} {event['payload']['action']} a release to repo {event['repo']['name']}")
 
-def issuesEventHandler(event):
+
+def watchEventHandler(event):
     print(event['type'])
-    print(
-f'''{event['actor']['display_login']} {event['payload']['action']} an issue for repo {event['repo']['name']}.'''
-    )
+    print(f"{event['actor']['display_login']} starred repo {event['repo']['name']}")
 
 
 def main():
@@ -124,17 +140,22 @@ def main():
     
     args = parser.parse_args()
     
-    event_handler = {'PushEvent': pushEventHandler,
-                     'PublicEvent': publicEventHandler,
-                     'ForkEvent': forkEventHandler,
-                     'PullRequestEvent': pullRequestEventHandler,
-                     'DeleteEvent': deleteEventHandler,
-                     'PullRequestReviewEvent': pullRequestReviewEventHandler,
-                     'IssueCommentEvent': issueCommentEventHandler,
-                     'PullRequestReviewCommentEvent': pullRequestReviewCommentHandler,
+    event_handler = {'CreateCommitEvent': createCommitEventHandler,
                      'CreateEvent': createEventHandler,
+                     'DeleteEvent': deleteEventHandler,
+                     'DiscussionEvent': discussionEventHandler,
+                     'ForkEvent': forkEventHandler,
+                     'GollumEvent': gollumEventHandler,
+                     'IssueCommentEvent': issueCommentEventHandler,
+                     'IssuesEvent': issuesEventHandler,
+                     'MemberEvent': memberEventHandler,
+                     'PublicEvent': publicEventHandler,
+                     'PullRequestEvent': pullRequestEventHandler,
+                     'PullRequestReviewEvent': pullRequestReviewEventHandler,
+                     'PullRequestReviewCommentEvent': pullRequestReviewCommentHandler,
+                     'PushEvent': pushEventHandler,                          
                      'ReleaseEvent': releaseEventHandler,
-                     'IssuesEvent': issuesEventHandler}
+                     'WatchEvent': watchEventHandler}
     
     if not args.username:
         parser.print_help()
